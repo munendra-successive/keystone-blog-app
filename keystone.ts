@@ -10,7 +10,7 @@ import { session } from "./auth";
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from "./schema";
-
+import { keystoneContext } from "./src/pages/keystone/context";
 // authentication is configured separately here too, but you might move this elsewhere
 // when you write your list-level access control functions, as they typically rely on session data
 import { createAuth } from "@keystone-6/auth";
@@ -37,11 +37,24 @@ export default withAuth(
       url: "postgres://postgres:postgres@localhost:5432/keystone",
       onConnect: async (context) => {
         /* ... */
+
+        console.log("Connected Successfully");
       },
+
       // Optional advanced configuration
+
       enableLogging: true,
       idField: { kind: "uuid" },
       shadowDatabaseUrl: "postgres://postgres:postgres@localhost:5432/shadowdb",
+    },
+
+    server: {
+      cors: {
+        origin: ["http://localhost:3000", "http://localhost:4000"], // Replace with the origin(s) allowed to access the server
+        methods: ["GET", "POST", "PUT", "DELETE"], // Specify the HTTP methods allowed
+        allowedHeaders: ["Content-Type", "Authorization"], // Specify the allowed request headers
+        credentials: true, // Allow cookies to be sent along with the requests
+      },
     },
     lists,
     storage: {

@@ -265,11 +265,24 @@ var keystone_default = withAuth(
       provider: "postgresql",
       url: "postgres://postgres:postgres@localhost:5432/keystone",
       onConnect: async (context) => {
+        console.log("Connected Successfully");
       },
       // Optional advanced configuration
       enableLogging: true,
       idField: { kind: "uuid" },
       shadowDatabaseUrl: "postgres://postgres:postgres@localhost:5432/shadowdb"
+    },
+    server: {
+      cors: {
+        origin: ["http://localhost:3000", "http://localhost:4000"],
+        // Replace with the origin(s) allowed to access the server
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        // Specify the HTTP methods allowed
+        allowedHeaders: ["Content-Type", "Authorization"],
+        // Specify the allowed request headers
+        credentials: true
+        // Allow cookies to be sent along with the requests
+      }
     },
     lists,
     storage: {
